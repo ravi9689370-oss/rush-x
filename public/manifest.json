@@ -1,6 +1,6 @@
 {
-  "name": "APP_NAME_HERE",
-  "short_name": "APP_NAME_HERE",
+  "name": "RUSH X",
+  "short_name": "RUSH X",
   "description": "Swipe fast. Drive forever. High-speed 3-lane neon cyber car runner.",
   "start_url": "./",
   "scope": "./",

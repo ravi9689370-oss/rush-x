@@ -9,8 +9,8 @@
 
 "use strict";
 
-/** The one and only app-name placeholder. Replace when branding is final. */
-export const APP_NAME = 'APP_NAME_HERE';
+/** The one and only app-name. Replace here — everything else follows. */
+export const APP_NAME = 'RUSH X';
 
 /** Android package id / Capacitor appId (kept here so brand sync controls it too). */
 export const APP_ID = 'com.rushx.turbo';

@@ -1,6 +1,6 @@
 {
   "appId": "com.rushx.turbo",
-  "appName": "APP_NAME_HERE",
+  "appName": "RUSH X",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "android": {

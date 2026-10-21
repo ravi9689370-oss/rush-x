@@ -59,4 +59,17 @@ const cap = {
 };
 writeFileSync(resolve(root, 'capacitor.config.json'), JSON.stringify(cap, null, 2) + '\n');
 
+/* ---------------- index.html title patch (idempotent) ----------------
+   Keeps the static <title>/meta in sync with the single APP_NAME source,
+   so the correct name shows even before JS boots (e.g. Android WebView). */
+const htmlPath = resolve(root, 'index.html');
+let html = readFileSync(htmlPath, 'utf8');
+const before = html;
+html = html.replace(/<title>[^<]*<\/title>/, `<title>${APP_NAME}</title>`);
+html = html.replace(/(<meta name="apple-mobile-web-app-title" content=")[^"]*(")/, `$1${APP_NAME}$2`);
+if (html !== before) {
+  writeFileSync(htmlPath, html);
+  console.log('[brand] index.html title/meta patched to', APP_NAME);
+}
+
 console.log(`[brand] APP_NAME="${APP_NAME}" APP_ID="${APP_ID}" → manifest.json + capacitor.config.json`);
