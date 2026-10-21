@@ -31,8 +31,13 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      # Note: ubuntu-latest runners ship with a preinstalled, license-accepted
+      # Android SDK (ANDROID_HOME). android-actions/setup-android no longer
+      # needed; it fails on the removed 'tools' package with cmdline-tools 16.
+      - name: Ensure SDK licenses accepted
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
 
       - name: Add & sync Android platform
         run: |
