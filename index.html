@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0914" />
+  <title>APP_NAME_HERE</title><!-- runtime-updated from src/config.js -->
+  <meta name="description" content="High-speed 3-lane neon cyber car runner. Swipe fast. Drive forever." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="APP_NAME_HERE" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
+  <style>/* critical prevent-flash */
+    html,body{margin:0;background:#0B0914;overflow:hidden;height:100%;}
+    #boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#A594F9;font:600 12px/1 system-ui,sans-serif;letter-spacing:4px;}
+  </style>
+</head>
+<body>
+  <canvas id="game" aria-label="Game canvas"></canvas>
+  <div id="boot">LOADING…</div>
+
+  <!-- ================= HUD ================= -->
+  <div id="hud" class="hud" hidden>
+    <div class="hud-top">
+      <button id="btn-pause" class="hud-btn" aria-label="Pause">⏸</button>
+      <div class="hud-scorebox">
+        <span id="hud-score">0</span>
+        <small id="hud-dist">0m</small>
+      </div>
+      <div class="hud-right">
+        <div class="hud-chips">💎 <span id="hud-chips">0</span></div>
+        <div id="hud-speed" class="hud-speed">x1.0</div>
+      </div>
+    </div>
+    <div class="pb-row">
+      <div class="pb" id="pb-shield">
+        <div class="pb-fill" id="pb-fill-shield"></div><span>🛡 SHIELD</span>
+      </div>
+      <div class="pb" id="pb-magnet">
+        <div class="pb-fill" id="pb-fill-magnet"></div><span>🧲 MAGNET</span>
+      </div>
+      <div class="pb" id="pb-boost">
+        <div class="pb-fill" id="pb-fill-boost"></div><span>⚡ TURBO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN MENU ================= -->
+  <section id="scene-menu" class="scene-menu on">
+    <div class="menu-stats">
+      <div class="pill pill-rose">🏆 BEST <b id="menu-best">0</b></div>
+      <div class="pill pill-cyan">💎 CHIPS <b id="menu-chips">0</b></div>
+      <div class="pill pill-mute">RUNS <b id="menu-runs">0</b></div>
+    </div>
+    <div class="menu-center">
+      <div class="brand">
+        <span class="brand-name" id="brand-name">APP_NAME_HERE</span>
+        <span class="brand-streak"></span>
+      </div>
+      <p class="tagline">SWIPE FAST. DRIVE FOREVER.</p>
+      <div class="menu-car" id="menu-car">
+        <div class="mc-body"><div class="mc-glass"></div><div class="mc-lights"><i></i><i></i></div></div>
+      </div>
+      <div class="skin-tag"><span id="menu-skin-dot"></span><span id="menu-skin-name">AURORA VORTEX</span></div>
+      <button id="btn-play" class="btn-play">▶ PLAY</button>
+    </div>
+    <div class="menu-foot">
+      <button id="btn-garage" class="btn-sub">🏎 GARAGE</button>
+      <button id="btn-how" class="btn-sub">❓ HOW TO</button>
+      <button id="btn-settings" class="btn-sub">⚙ SETTINGS</button>
+    </div>
+  </section>
+
+  <!-- ================= MODALS ================= -->
+  <div id="modals">
+
+    <!-- GARAGE -->
+    <div class="modal" id="m-garage">
+      <div class="card">
+        <h2>🏎 GARAGE</h2>
+        <p class="card-sub">YOUR CHIPS: 💎 <b id="gar-chips">0</b></p>
+        <div id="gar-list" class="gar-list"></div>
+        <button class="btn-ghost wide" id="btn-gar-close">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="modal" id="m-settings">
+      <div class="card">
+        <h2>⚙ SETTINGS</h2>
+        <div class="set-row"><span>🔊 SFX</span><button class="tgl on" id="st-sfx">ON</button></div>
+        <div class="set-row"><span>🎵 MUSIC</span><button class="tgl on" id="st-music">ON</button></div>
+        <div class="set-row"><span>📳 HAPTICS</span><button class="tgl on" id="st-hap">ON</button></div>
+        <div class="set-row"><span>✨ QUALITY</span><button class="tgl on" id="st-quality">HIGH</button></div>
+        <p class="card-sub">Best score, chips and skins live on this device (offline).</p>
+        <button class="btn-danger wide" id="btn-reset">RESET PROGRESS</button>
+        <button class="btn-ghost wide" id="btn-st-close">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- HOW TO -->
+    <div class="modal" id="m-how">
+      <div class="card">
+        <h2>❓ HOW TO PLAY</h2>
+        <div class="how-grid">
+          <div class="how-row"><span class="how-k">⬅ ➡ / swipe</span><span>change lane</span></div>
+          <div class="how-row"><span class="how-k">⬆ / swipe up</span><span>jump over <b style="color:#F59E0B">barricades</b></span></div>
+          <div class="how-row"><span class="how-k">⬇ / swipe down</span><span>slide under <b style="color:#FF3B5C">lasers</b></span></div>
+          <div class="how-row"><span class="how-k">🟣 wall</span><span>cannot be passed — switch lane!</span></div>
+        </div>
+        <div class="how-grid">
+          <div class="how-row"><span>💎</span><span>data chips → buy skins</span></div>
+          <div class="how-row"><span style="color:#10B981">🛡</span><span>shield absorbs one crash</span></div>
+          <div class="how-row"><span style="color:#FACC15">🧲</span><span>magnet steals all lanes' chips</span></div>
+          <div class="how-row"><span style="color:#EC4899">⚡</span><span>turbo = invincible speed</span></div>
+        </div>
+        <p class="card-sub">Near-misses and clean dodges build a score combo ⚡</p>
+        <button class="btn-ghost wide" id="btn-how-close">GOT IT</button>
+      </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div class="modal" id="m-pause">
+      <div class="card">
+        <h2>⏸ PAUSED</h2>
+        <button class="btn-play slim" id="btn-resume">▶ RESUME</button>
+        <div class="row2">
+          <button class="btn-ghost" id="btn-restart">⟳ RESTART</button>
+          <button class="btn-ghost" id="btn-pause-home">🏠 HOME</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div class="modal" id="m-over">
+      <div class="card">
+        <div class="alert-tag">CRASH DETECTED</div>
+        <h2 id="ov-title">RUN COMPLETE!</h2>
+        <div class="ov-badge" id="ov-newbest" hidden>🔥 NEW HIGH SCORE</div>
+        <div class="ov-table">
+          <div class="ov-row"><span>SCORE</span><b id="ov-score">0</b></div>
+          <div class="ov-row"><span>DISTANCE</span><b id="ov-dist">0m</b></div>
+          <div class="ov-row"><span>CHIPS</span><b class="ct-cyan" id="ov-chips">+0</b></div>
+          <div class="ov-row"><span>BEST</span><b class="ct-rose" id="ov-best">0</b></div>
+        </div>
+        <button class="btn-play slim" id="btn-continue" hidden>💛 CONTINUE — 💎100</button>
+        <button class="btn-play slim" id="btn-again">⟳ RUN AGAIN</button>
+        <button class="btn-ghost wide" id="btn-over-home">🏠 HOME</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" hidden></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

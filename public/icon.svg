@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- RUSH X launcher icon — original procedural artwork.
+       Monogram "X" with a speed wedge, on deep velvet night. -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#231942"/>
+      <stop offset="100%" stop-color="#0B0914"/>
+    </radialGradient>
+    <linearGradient id="xg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F5D4"/>
+      <stop offset="55%" stop-color="#00BBF9"/>
+      <stop offset="100%" stop-color="#FF2A85"/>
+    </linearGradient>
+    <linearGradient id="wg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF2A85" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FF2A85" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- speed wedge behind the X -->
+  <path d="M256 74 L330 172 L182 172 Z" fill="url(#wg)"/>
+  <circle cx="256" cy="250" r="130" fill="#FF2A85" opacity="0.10"/>
+
+  <!-- the X monogram -->
+  <g filter="url(#glow)">
+    <path d="M120 150 L208 150 L392 380 L304 380 Z" fill="url(#xg)"/>
+    <path d="M304 150 L392 150 L208 380 L120 380 Z" fill="url(#xg)"/>
+  </g>
+
+  <!-- speed streak base -->
+  <rect x="116" y="404" width="280" height="10" rx="5" fill="#00F5D4" opacity="0.55"/>
+  <rect x="156" y="424" width="200" height="7" rx="3.5" fill="#A594F9" opacity="0.35"/>
+</svg>
